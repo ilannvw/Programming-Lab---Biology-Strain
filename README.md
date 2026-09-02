@@ -10,7 +10,7 @@ By analysing the cellular counts and the three-dimensional momentum distribution
 
 1. **What are the counts of each bacterial strain and their statistical uncertainties?**
 
-2. **Is there any asymmetry between the normal and the mutant strain? (statistical significance????)**
+2. **Is there any asymmetry between the normal and the mutant strain? ($$\sigma_A = \frac{2 \sqrt{N_{\text{WT}} \cdot N_{\text{Mutant}}}}{(N_{\text{WT}} + N_{\text{Mutant}})^{3/2}}$$)**
 
 3. **Is there any asymmetry as a function of the momentum? ($$p = \sqrt{p_x^2 + p_y^2 + p_z^2}$$)**
 
