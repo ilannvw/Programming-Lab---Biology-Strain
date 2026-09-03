@@ -1,10 +1,16 @@
 # Programming Lab - Biology Strain
 
+A Python programme that reads experimental simulation files to be able to compare the population sizes and movements of normal bacteria compared to their mutants.
+
 ## Project Overview
 
-This project investigates how bacteria moves and proliferates under controlled nutrient and stress conditions. Using simulated data from bacterial experiments, the analysis compares how the wild-type (WT) strains differ from the mutant / drug-resistant strains. 
+### Context
 
-By analysing the cellular counts and the three-dimensional momentum distribution, this project aims to identify the phenotypic variations, the advantages of selective proliferation, and possible kinematic differences that come from genetic variation or environmental stressors.
+When bacteria mutate or become resistant to certain antibiotics, their behaviour changes.
+
+In this project, we will analyse computer simulation runs of bacterial cultures. Every run tracks individual cells, recording which strain they belong to, their proliferation and movement speed across three dimensions (x, y, z) under controlled nutrient and stress conditions. 
+
+When comparing normal strains (WT, positive IDs) to mutant strains (negative IDs) across different bacterial species, we want to see which strains dominate and whether movement speed plays a role. 
 
 ## Research Questions
 
@@ -16,16 +22,40 @@ By analysing the cellular counts and the three-dimensional momentum distribution
 
 ## Dataset and Input
 
-The data used for the simulation follows a structured format that represent actual experiment runs. 
+The data files used for the simulation follows a structured format that represent actual experiment runs. 
 
 * **Header Row:**
     * Event ID': Unique identifier for the simulation run
-    * Number of bacetria tracked: Total cell count.
+    * Number of bacteria tracked: Total cell count.
 * **Data Rows:**
     * Momentum components: $p_x$, $p_y$, $p_z$ 
     * Bacterial ID: Numeric code denoting the bacterial strain. 
 
-## Cloning the Repository
+## Cloning the Repository and Setup
+
+### Prequisites
+
+* Python 3.10+
+* A terminal on macOS, Linux, or Windows
+
+### Cloning the Repository
+
 ```bash
 git clone [https://github.com/ilannvw/Programming-Lab---Biology-Strain.git](https://github.com/ilannvw/Programming-Lab---Biology-Strain.git) 
 cd Programming-Lab---Biology-Strain
+```
+
+### Install Dependencies
+
+Install numpy and Matplotlib 
+```bash
+python3 -m pip install numpy matplotlib
+```
+Place the Data files in a folder call data
+```bash
+mkdir -p data
+```
+Run the main analysis script
+```bash
+python3 main.py
+```
