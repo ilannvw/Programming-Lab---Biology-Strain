@@ -1,6 +1,6 @@
 # Programming Lab - Biology Strain
 
-A Python programme that reads experimental simulation files to be able to compare the population sizes and movements of normal bacteria compared to their mutants.
+A Python programme that reads simulation run data to be able to compare the population sizes and movements of normal bacteria compared to their mutants.
 
 ---
 
@@ -8,23 +8,30 @@ A Python programme that reads experimental simulation files to be able to compar
 
 ### Context
 
-When bacteria undergo mutation or become resistant to certain antibiotics, their behaviour changes. In this project, we will analyse computer simulation runs of bacterial cultures. Every run tracks individual cells, recording which strain they belong to, their proliferation and movement speed across three dimensions $(x, y, z)$ under controlled nutrient and stress conditions. 
+When bacteria undergo mutation or become resistant to certain antibiotics, their behaviour changes. 
+In this project, we will analyse  simulation run data of bacterial cultures. Every run tracks individual cells, recording which strain they belong to, their proliferation rate and movement speed across three dimensions $(x, y, z)$ under controlled conditions.  
 
-When comparing normal strains (WT, positive IDs) to mutant strains (negative IDs) across different bacterial species, we want to see which strains dominate and whether movement speed plays a role. 
+When comparing the wild-type (WT, positive IDs) to mutant strains (negative IDs) across different bacterial species, we want to see which strains dominate and to verify if movement speed matters.
 
 ---
 
 ## Research Questions
 
-1. **What are the counts of each bacterial strain and their statistical uncertainties?**
+1. **What are the average counts of each bacterial strain and their statistical uncertainties?**
 
-2. **Is there any asymmetry between the normal and the mutant strain? ($$\sigma_A = \frac{2 \sqrt{N_{\text{WT}} \cdot N_{\text{Mutant}}}}{(N_{\text{WT}} + N_{\text{Mutant}})^{3/2}}$$)**
+2. **Is there any asymmetry between the normal and the mutant strain?**
 
-3. **Is there any asymmetry as a function of the momentum? ($$p = \sqrt{p_x^2 + p_y^2 + p_z^2}$$)**
+  We quantify the relative population asymmetry ($A$):
+  $$A = \frac{N_{\text{WT}} - N_{\text{Mutant}}}{N_{\text{WT}} + N_{\text{Mutant}}}$$
 
-  To answer this, the total momentum $p$ is computed for each cell, and then grouped in momentum bins. Within each group, the asymmetry $\sigma_A$ between WT and mutant counts is calculated using the formula above. This will make it possible to see whether the balance between WT and mutant strains shifts at different momentum ranges, rather than overall.  
+  Then we determine its statistical significance using the error propagation formula: 
+  $$\sigma_A = \frac{2 \sqrt{N_{\text{WT}} \cdot N_{\text{Mutant}}}}{(N_{\text{WT}} + N_{\text{Mutant}})^{3/2}}$$
 
-  ---
+3. **Is there any asymmetry as a function of their momentum? ($$p = \sqrt{p_x^2 + p_y^2 + p_z^2}$$)**
+
+  The total momentum $p$ is computed for each cell, and then grouped in momentum bins. Within each group, the asymmetry $\sigma_A$ between WT and mutant counts is calculated using the formula above. This will make it possible to see whether the balance between the WT and the mutant strains shifts at different momentum ranges, rather than overall.  
+
+---
 
 ## Dataset and Input
 
@@ -57,7 +64,7 @@ Each row follows the format: `p_x p_y p_z Bacterial_ID`
 
 ### Bacterial ID Reference
 
-Each row in the input files ends with the ID that identifies the bacterial strain. The mapping used is:
+Every row in the data files ends with the ID that identifies the bacterial strain. The mapping used is:
 
 | Bacterial ID | Bacterial strain |
 | --- | --- |
@@ -95,7 +102,7 @@ Install numpy and Matplotlib
 ```bash
 python3 -m pip install numpy matplotlib
 ```
-Place the Data files in a folder called data
+Place the Data files in a folder called 'data'
 ```bash
 mkdir -p data
 ```
@@ -106,6 +113,6 @@ python3 main.py
 
 ---
 
-**Course:** Programming (PRA2003) - Maastricht University
+**Course:** Programming (PRA2003) | Maastricht University
 **Author:** Ilan Noè
 **Date:** September 2026
