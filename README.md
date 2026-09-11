@@ -41,7 +41,7 @@ The data files used for the simulation follow a structured format that represent
   * Event ID: Unique identifier for the simulation run
   * Number of bacteria tracked: Total cell count.
 * **Data Rows:**
-  * Momentum components: $p_x$, $p_y$, $p_z$ (in units of $10^{-20} kg·m/s$)
+  * Momentum components: $p_x$, $p_y$, $p_z$ (in units of $10^{-20}$ kg·m/s)
   * Bacterial ID: Numeric code denoting the bacterial strain. 
 
 ### Example Input File
@@ -98,18 +98,29 @@ Every row in the data files ends with the ID that identifies the bacterial strai
 
 ### Install Dependencies
 
-Install numpy and Matplotlib 
+Currently, `main.py` only uses Python's built-in `math` package, no external libraries are needed yet. `numpy` and `matplotlib` will be needed in later weeks, for statistical analysis and plotting. 
+
 ```bash
 python3 -m pip install numpy matplotlib
 ```
-Place the Data files in a folder called 'data'
+
+The data files are expected in a `data` folder; create it if it doesn't exist yet:
+
 ```bash
 mkdir -p data
 ```
-Run the main analysis script
+Run the main analysis script:
+
 ```bash
 python3 main.py
 ```
+---
+
+### Output
+
+Running `main.py` reads a single event from `data/output-Set0.txt` and prints:
+- the event ID and the total number of bacteria tracked
+- for each bacterium: its bacterial ID and total momentum magnitude $p = \sqrt{p_x^2 + p_y^2 + p_z^2}$
 
 ---
 
