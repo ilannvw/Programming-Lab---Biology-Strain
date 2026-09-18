@@ -62,6 +62,9 @@ The data files used for the simulation follow a structured format that represent
 
 Each row follows the format: `p_x p_y p_z Bacterial_ID`
 
+A single file may contain many events (header, that many data rows, header, and so on), the full data datasets used from the third week onwards contain 
+500,000 events in this format. 
+
 ### Bacterial ID Reference
 
 Every row in the data files ends with the ID that identifies the bacterial strain. The mapping used is:
@@ -109,6 +112,11 @@ The data files are expected in a `data` folder; create it if it doesn't exist ye
 ```bash
 mkdir -p data
 ```
+
+Two data files are used:
+- `data/output-Set0.txt`- single-event test file (used for momentum calculation in Week 2).
+- `data/output-Set6.txt`- 500,000 event dataset. This file is around 770 MB and is not included in this repository; it must be downloaded separately from the surfdrive provided in the course materials and placed in the data folder before running the code, otherwise it will not work. 
+
 Run the main analysis script:
 
 ```bash
@@ -118,9 +126,15 @@ python3 main.py
 
 ### Output
 
-Running `main.py` reads a single event from `data/output-Set0.txt` and prints:
+Running `main.py`:
+
+1. Reads a single event from `data/output-Set0.txt` and prints:
 - the event ID and the total number of bacteria tracked
 - for each bacterium: its bacterial ID and total momentum magnitude $p = \sqrt{p_x^2 + p_y^2 + p_z^2}$
+
+2. Reads all 500,000 events from `data/output-Set6.txt` and prints:
+  - the average count of that strain per event
+  - the statistical uncertainty, calculated from the Poisson statistics on the total count summed across all the events
 
 ---
 
