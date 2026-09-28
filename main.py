@@ -1,4 +1,5 @@
 import math # gives access to math.sqrt() for the momentum calculation
+import statistics # # gives access to statistics.stdev() for the sub-sampling uncertainty
 
 # week 2: read a single event and calculate the momentum of each bacterium
 
@@ -85,6 +86,31 @@ def calculate_average_and_uncertainty(total_count, n_events):
     uncertainty = math.sqrt(total_count) / n_events # Poisson uncertainty on the total, divided by n_events
     return average, uncertainty
 
+# week 4: analyse each file separately, and then use the spread of these results as the statistical
+# uncertainty (called the sub-sampling method)
+
+# this method analyses every file separately with the week 3 function, and returns for every ID
+# a list with its average count per event in every file
+def analyse_subsamples(filepaths, ids_of_interest):
+    subsample_averages = {} # for every ID, a list with one average per file
+    for bacterial_id in ids_of_interest:
+        subsample_averages[bacterial_id] = [] # add id to the list
+
+    for filepath in filepaths:
+        print(f"analysing {filepath}") # formatted string to show progress for when the code is run
+        counts, n_events = count_bacteria_per_event(filepath, ids_of_interest) # one sub-sample
+        for bacterial_id in ids_of_interest: # goes through every ID for this file
+            average = counts[bacterial_id] / n_events # average count per event in this file
+            subsample_averages[bacterial_id].append(average)
+    return subsample_averages
+
+# central value is the mean of the sub-sample averages (all the files have the same size, so no need to weight each file)
+# uncertainty = standard deviation of the sub-sample averages (spread)
+def calculate_mean_and_uncertainty(averages):
+    mean = statistics.mean(averages)
+    uncertainty = statistics.stdev(averages)
+    return mean, uncertainty
+
 def main():
 
     # week 2: momentum calculation for single event
@@ -113,6 +139,26 @@ def main():
         average, uncertainty = calculate_average_and_uncertainty(total, n_events)
         print(f"{strain_name} ({bacterial_id}): average = {average:.4f} \u00b1 {uncertainty:.4f} per event") # \u00b1 prints the ± sign
 
+    # week 4: average count per event over all the sub-samples with uncertainty
+    print("\nweek 4: average bacteria counts per event from all the sub-samples\n")
+    filepaths = []
+    for i in range(1, 11): # goes through the 10 files, from output-Set1.txt to output-Set10.txt
+        filepaths.append(f"data/output-Set{i}.txt")
+    
+    subsample_averages = analyse_subsamples(filepaths, ids_of_interest)
+
+    print(f"\nnumber of sub-samples: {len(filepaths)}\n") # len(filepaths) counts the files analysed
+
+    # printed in a table, can be copied to README
+    print("| Bacterial ID | Bacterial strain | Average count per event |")
+    print("| --- | --- | --- |")
+
+    # goes through every bacterial ID and prints one row of the table for it
+    for bacterial_id, strain_name in ids_of_interest.items(): # .items() gives the ID and the strain name from the dictionary
+        # the list of 10 sub-sample averages of this ID is used to get the mean and the uncertainty
+        mean, uncertainty = calculate_mean_and_uncertainty(subsample_averages[bacterial_id])
+        # prints the row, with mean and the uncertainty (\u00b1 is the ± symbol) up to 6 decimals
+        print(f"| {bacterial_id} | {strain_name} | {mean:.6f} \u00b1 {uncertainty:.6f} (stat) |")
  
 if __name__ == "__main__":
     main()
