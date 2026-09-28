@@ -1,5 +1,5 @@
 import math # gives access to math.sqrt() for the momentum calculation
-import statistics # # gives access to statistics.stdev() for the sub-sampling uncertainty
+import statistics # gives access to statistics.stdev() for the sub-sampling uncertainty
 
 # week 2: read a single event and calculate the momentum of each bacterium
 
@@ -89,12 +89,12 @@ def calculate_average_and_uncertainty(total_count, n_events):
 # week 4: analyse each file separately, and then use the spread of these results as the statistical
 # uncertainty (called the sub-sampling method)
 
-# this method analyses every file separately with the week 3 function, and returns for every ID
+# this function analyses every file separately with the week 3 function, and returns for every ID
 # a list with its average count per event in every file
 def analyse_subsamples(filepaths, ids_of_interest):
     subsample_averages = {} # for every ID, a list with one average per file
     for bacterial_id in ids_of_interest:
-        subsample_averages[bacterial_id] = [] # add id to the list
+        subsample_averages[bacterial_id] = [] # starts every ID with an empty list
 
     for filepath in filepaths:
         print(f"analysing {filepath}") # formatted string to show progress for when the code is run
