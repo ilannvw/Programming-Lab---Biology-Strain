@@ -8,15 +8,14 @@ from main import calculate_momentum, analyse_subsamples, calculate_mean_and_unce
 
 # the pair that is analysed (the WT has the positive ID, the mutant has the negative ID)
 # to analyse the other pair, change these four lines (3334, -3334 and the names) and the bin edges below
-WT_ID = 2212
-MUTANT_ID = -2212
-WT_NAME = "Pseudomonas aeruginosa WT"
-MUTANT_NAME = "Pseudomonas aeruginosa antibiotic-resistant"
+WT_ID = 3334
+MUTANT_ID = -3334
+WT_NAME = "Salmonella enterica"
+MUTANT_NAME = "Salmonella mutant"
 
 # edges of the momentum bins (units = 10^-20 kg m/s): the first bin is 0 to 1, the second is 1 to 2, and so on
 # 3334 / -3334 has very few bacteria, so for that pair use wider bins, for example [0, 2, 4, 6, 8, 12, 20]
-BIN_EDGES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20]
-
+BIN_EDGES = [0, 2, 4, 6, 8, 12, 20]
 NUMBER_OF_FILES = 10 # output-Set1.txt to output-Set10.txt
 
 # returns the number of the bin the momentum falls in (0 is the first bin), or None if it falls outside all the bins
@@ -84,10 +83,10 @@ def main():
     for i in range(1, NUMBER_OF_FILES + 1):
         filepaths.append(f"data/output-Set{i}.txt")
 
-    # part 1: the week 4 results of the pair, from main.py
-    # the week 4 functions need a dictionary with the IDs to analyse, here only the WT and the mutant
+    # week 4 results of the pair, from main.py
+    # the week 4 functions need a dictionary with the IDs to be able to analyse
     pair_ids = {WT_ID: WT_NAME, MUTANT_ID: MUTANT_NAME}
-    # for every ID, a list with its average count per event in each file
+    # this is a list for every ID with its average count per event in each file
     subsample_averages = analyse_subsamples(filepaths, pair_ids)
 
     print("\n| Bacterial ID | Bacterial strain | Average count per event |")
@@ -96,13 +95,14 @@ def main():
         mean, uncertainty = calculate_mean_and_uncertainty(subsample_averages[bacterial_id])
         print(f"| {bacterial_id} | {strain_name} | {mean:.6f} ± {uncertainty:.6f} (stat) |")
 
-    # part 2: overall asymmetry, with all the bacteria of the pair (no bins), one value per file
-    # the average count per event can be used for A, because dividing both counts by the same number of events does not change A
+    # one asymmetry for the whole pair (all momenta together), and calculated once for every file
+    # we can use the averages per event instead of the raw counts: both counts are divided by the 
+    # same number, so A stays the same
     overall_asymmetries = []
     for i in range(NUMBER_OF_FILES):
         overall_asymmetries.append(calculate_asymmetry(subsample_averages[WT_ID][i], subsample_averages[MUTANT_ID][i]))
 
-    # mean of the 10 files, uncertainty is the standard deviation of the 10 files (sub-sampling)
+    # this is the mean of the 10 files, and uncertainty (the standard deviation) of the 10 files (sub-sampling)
     overall_mean = statistics.mean(overall_asymmetries)
     overall_uncertainty = statistics.stdev(overall_asymmetries)
     print(f"\n{WT_NAME} vs {MUTANT_NAME}")
@@ -110,7 +110,7 @@ def main():
     if overall_uncertainty > 0:
         print(f"significance = {abs(overall_mean) / overall_uncertainty:.2f} standard deviations")
 
-    # part 3: asymmetry per momentum bin
+    # asymmetry per momentum bin
     # one list per momentum bin, each list holds the asymmetry of that bin from every file
     bin_asymmetries = []
     for b in range(n_bins):
@@ -119,7 +119,7 @@ def main():
     # every file is analysed separately
     print("")
     for filepath in filepaths:
-        print(f"analysing the momenta in {filepath}")
+        print(f"analysing momenta in {filepath}")
         wt_counts, mutant_counts, outside = count_momentum_bins(filepath)
         print(wt_counts, mutant_counts) # the WT and the mutant counts per bin, to check that the bins have enough bacteria
 
@@ -132,9 +132,9 @@ def main():
             if asymmetry is not None: # a bin without any bacteria in this file is skipped
                 bin_asymmetries[b].append(asymmetry)
 
-    # asymmetry per bin: mean and standard deviation over the files, printed in a table for the results section in the README
-    centres = [] # middle of every bin, the x-position of the point
-    half_widths = [] # half the width of the bin, used for the horizontal bars
+    # for every bin, the mean and the standard deviation of the 10 files, shown in a table we can copy into the README file
+    centres = [] # the middle of each bin, where its dot goes on the plot
+    half_widths = [] # half the size of each bin, so the horizontal line covers the whole bin
     means = []
     uncertainties = []
 
@@ -145,7 +145,7 @@ def main():
         high = BIN_EDGES[b + 1]
         values = bin_asymmetries[b] # the asymmetries of this bin, one per file
 
-        if len(values) < 2: # the standard deviation needs at least 2 files
+        if len(values) < 2: # we need at least 2 files to work out a standard deviation
             print(f"| {low} - {high} | not enough data |")
         else:
             mean = statistics.mean(values)
@@ -156,7 +156,8 @@ def main():
             means.append(mean)
             uncertainties.append(uncertainty)
 
-    # plot: asymmetry vs momentum, vertical bars = statistical uncertainty, horizontal bars = width of the bin
+    # plot asymmetry vs momentum, the vertical bars are the statistical uncertainty, 
+    # and the horizontal bars are the width of the bin
     plt.figure(figsize=(8, 5))
     plt.errorbar(centres, means, xerr=half_widths, yerr=uncertainties, fmt="o", color="black", capsize=3)
     plt.axhline(0, linestyle="--", color="grey") # A = 0 means no asymmetry
