@@ -137,7 +137,7 @@ def main():
     for bacterial_id, strain_name in ids_of_interest.items():
         total = counts[bacterial_id]
         average, uncertainty = calculate_average_and_uncertainty(total, n_events)
-        print(f"{strain_name} ({bacterial_id}): average = {average:.4f} \u00b1 {uncertainty:.4f} per event") # \u00b1 prints the ± sign
+        print(f"{strain_name} ({bacterial_id}): average = {average:.6f} \u00b1 {uncertainty:.6f} per event") # \u00b1 prints the ± sign
 
     # week 4: average count per event over all the sub-samples with uncertainty
     print("\nweek 4: average bacteria counts per event from all the sub-samples\n")
@@ -158,7 +158,7 @@ def main():
         # the list of 10 sub-sample averages of this ID is used to get the mean and the uncertainty
         mean, uncertainty = calculate_mean_and_uncertainty(subsample_averages[bacterial_id])
         # prints the row, with mean and the uncertainty (\u00b1 is the ± symbol) up to 6 decimals
-        print(f"| {bacterial_id} | {strain_name} | {mean:.6f} \u00b1 {uncertainty:.6f} (stat) |")
+        print(f"| {bacterial_id} | {strain_name} | {mean:.6f} \u00b1 {uncertainty:.6f} |")
  
 if __name__ == "__main__":
     main()

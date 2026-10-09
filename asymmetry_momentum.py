@@ -93,7 +93,7 @@ def main():
     print("| --- | --- | --- |")
     for bacterial_id, strain_name in pair_ids.items():
         mean, uncertainty = calculate_mean_and_uncertainty(subsample_averages[bacterial_id])
-        print(f"| {bacterial_id} | {strain_name} | {mean:.6f} ± {uncertainty:.6f} (stat) |")
+        print(f"| {bacterial_id} | {strain_name} | {mean:.6f} ± {uncertainty:.6f} |")
 
     # one asymmetry for the whole pair (all momenta together), and calculated once for every file
     # we can use the averages per event instead of the raw counts: both counts are divided by the 
@@ -106,7 +106,7 @@ def main():
     overall_mean = statistics.mean(overall_asymmetries)
     overall_uncertainty = statistics.stdev(overall_asymmetries)
     print(f"\n{WT_NAME} vs {MUTANT_NAME}")
-    print(f"overall asymmetry A = {overall_mean:.6f} ± {overall_uncertainty:.6f} (stat)")
+    print(f"overall asymmetry A = {overall_mean:.6f} ± {overall_uncertainty:.6f}")
     if overall_uncertainty > 0:
         print(f"significance = {abs(overall_mean) / overall_uncertainty:.2f} standard deviations")
 
@@ -150,7 +150,7 @@ def main():
         else:
             mean = statistics.mean(values)
             uncertainty = statistics.stdev(values)
-            print(f"| {low} - {high} | {mean:.5f} ± {uncertainty:.5f} (stat) |")
+            print(f"| {low} - {high} | {mean:.5f} ± {uncertainty:.5f} |")
             centres.append((low + high) / 2)
             half_widths.append((high - low) / 2)
             means.append(mean)

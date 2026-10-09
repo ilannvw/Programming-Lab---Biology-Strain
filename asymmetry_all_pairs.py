@@ -34,11 +34,11 @@ def main():
                 if asymmetry is not None: # a file without any bacteria of this pair is skipped
                     asymmetries.append(asymmetry)
 
-        # mean and standard deviation of the files (sub-sampling), and the significance = |A| / uncertainty
-        mean = statistics.mean(asymmetries)
-        uncertainty = statistics.stdev(asymmetries)
-        significance = abs(mean) / uncertainty
-        print(f"| {wt_name} ({wt_id} / {mutant_id}) | {mean:.6f} \u00b1 {uncertainty:.6f} (stat) | {significance:.1f} \u03c3 |")
+            # mean and standard deviation of the files (sub-sampling), and the significance = |A| / uncertainty
+            mean = statistics.mean(asymmetries)
+            uncertainty = statistics.stdev(asymmetries)
+            significance = abs(mean) / uncertainty
+            print(f"| {wt_name} ({wt_id} / {mutant_id}) | {mean:.6f} \u00b1 {uncertainty:.6f} | {significance:.1f} \u03c3 |")
 
 if __name__ == "__main__":
     main()
