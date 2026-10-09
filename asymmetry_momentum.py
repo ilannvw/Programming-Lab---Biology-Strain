@@ -8,14 +8,14 @@ from main import calculate_momentum, analyse_subsamples, calculate_mean_and_unce
 
 # the pair that is analysed (the WT has the positive ID, the mutant has the negative ID)
 # to analyse the other pair, change these four lines (3334, -3334 and the names) and the bin edges below
-WT_ID = 3334
-MUTANT_ID = -3334
-WT_NAME = "Salmonella enterica"
-MUTANT_NAME = "Salmonella mutant"
+WT_ID = 2212
+MUTANT_ID = -2212
+WT_NAME = "Pseudomonas aeruginosa WT"
+MUTANT_NAME = "Pseudomonas aeruginosa antibiotic-resistant"
 
 # edges of the momentum bins (units = 10^-20 kg m/s): the first bin is 0 to 1, the second is 1 to 2, and so on
 # 3334 / -3334 has very few bacteria, so for that pair use wider bins, for example [0, 2, 4, 6, 8, 12, 20]
-BIN_EDGES = [0, 2, 4, 6, 8, 12, 20]
+BIN_EDGES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20]
 NUMBER_OF_FILES = 10 # output-Set1.txt to output-Set10.txt
 
 # returns the number of the bin the momentum falls in (0 is the first bin), or None if it falls outside all the bins
@@ -159,10 +159,12 @@ def main():
     # plot asymmetry vs momentum, the vertical bars are the statistical uncertainty, 
     # and the horizontal bars are the width of the bin
     plt.figure(figsize=(8, 5))
-    plt.errorbar(centres, means, xerr=half_widths, yerr=uncertainties, fmt="o", color="black", capsize=3)
-    plt.axhline(0, linestyle="--", color="grey") # A = 0 means no asymmetry
+    plt.errorbar(centres, means, xerr=half_widths, yerr=uncertainties, fmt="o", color="black", capsize=3,
+             label="asymmetry per momentum bin (mean of 10 files ± std. dev.)")
+    plt.axhline(0, linestyle="--", color="grey", label="A = 0 (no asymmetry)")
+    plt.ylabel("asymmetry A (dimensionless)")
     plt.xlabel("momentum p ($10^{-20}$ kg m/s)")
-    plt.ylabel("asymmetry A")
+    plt.legend()
     plt.title(f"{WT_NAME} vs {MUTANT_NAME}")
     plt.tight_layout()
     plt.savefig(f"asymmetry_{WT_ID}.png", dpi=200) # saved so it can be used in the README and the presentation
